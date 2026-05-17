@@ -1,50 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weather Application</title>
-<style>
-/* Add CSS styles for formatting the weather information */
-</style>
+  <meta charset="UTF-8">
+  <title>Weather App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome for weather icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input {
+      padding: 10px;
+      width: 70%;
+      border: 2px solid #4facfe;
+      border-radius: 8px;
+      outline: none;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      background: #4facfe;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #00c6fb;
+    }
+    .weather-card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f0f8ff;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      animation: slideUp 0.8s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .weather-card i {
+      font-size: 40px;
+      color: #4facfe;
+      margin-bottom: 10px;
+    }
+    .error {
+      margin-top: 20px;
+      color: red;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-<h1>Weather Information</h1>
-<!-- Add a form for user input -->
-<form id="location-form">
-<label for="location">Enter a city name (and optionally, a country code,
-separated by a comma):</label>
-<input type="text" id="location" name="location" required>
-<button type="submit">Get Weather</button>
-  </form>
-<!-- Weather information will be displayed here -->
-<div id="weather-info">
-<!-- Weather data will be displayed here -->
-</div>
-<script>
-const weatherInfoDiv = document.getElementById('weather-info');
-const locationInput = document.getElementById('location');
-document.getElementById('location-form').addEventListener('submit', async (e) =>
-{
-e.preventDefault();
-const location = locationInput.value;
-// Make an AJAX request to the server with the location as a query parameter
-const response = await
-fetch(`/weather?location=${encodeURIComponent(location)}`);
-const weatherData = await response.json();
-if (weatherData && !weatherData.error) {
-// Display weather information
-weatherInfoDiv.innerHTML= `
-<p>City: ${weatherData.city}</p>
-<p>Temperature: ${weatherData.temperature}</p>
-<p>Weather: ${weatherData.description}</p>
-`;
-} else {
-// Display an error message
-weatherInfoDiv.innerHTML = `<p>${weatherData.error || 'An error
-occurred.'}</p>`;
-}
-});
-</script>
+  <div class="container">
+    <h1>🌤 Weather App</h1>
+    <div>
+      <input type="text" id="locationInput" placeholder="Enter city name">
+      <button onclick="getWeather()">Search</button>
+    </div>
+    <div id="weatherResult"></div>
+  </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById('locationInput').value.trim();
+      const resultDiv = document.getElementById('weatherResult');
+      resultDiv.innerHTML = '';
+
+      if (!location) {
+        resultDiv.innerHTML = '<p class="error">⚠️ Please enter a city name.</p>';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/weather?location=${location}`);
+        const data = await response.json();
+
+        if (data.error) {
+          resultDiv.innerHTML = `<p class="error">❌ ${data.error}</p>`;
+        } else {
+          resultDiv.innerHTML = `
+            <div class="weather-card">
+              <i class="fa-solid fa-cloud-sun"></i>
+              <h2>${data.city}</h2>
+              <p><strong>Temperature:</strong> ${data.temperature}</p>
+              <p><strong>Condition:</strong> ${data.description}</p>
+            </div>
+          `;
+        }
+      } catch (err) {
+        resultDiv.innerHTML = '<p class="error">⚠️ Unable to fetch weather data.</p>';
+      }
+    }
+  </script>
 </body>
 </html>
