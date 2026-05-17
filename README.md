@@ -37,12 +37,25 @@ Weather-App/
 ---
 
 ## 📸 Screenshots
-*(Add screenshots or GIFs of your app running here)*
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/e70a1b83-0061-4254-9382-0b6165ede682" />
+
 
 ---
 
 ## ⚙️ Installation & Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/Weather-App.git
+   git clone https://github.com/kavinraj292008-a11y/Weather-.git
    cd Weather-App
+2. Install Dependencies:
+   npm intall axios
+   npm install dotenv
+   npm install readline
+3. Run the Application:
+   node weather.js
+4. Open in Browser:
+   http://localhost:3000
+   
+       
+      
+   
