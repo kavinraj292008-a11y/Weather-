@@ -6,7 +6,7 @@ const url = require('url');
 
 // Function to fetch weather data
 async function fetchWeatherData(city) {
-  const apiKey = 'e3bfd0ea161828dff11b72f904c22e30';
+  const apiKey = process.env.API_KEY;
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
   try {
     const response = await axios.get(apiUrl);
@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
